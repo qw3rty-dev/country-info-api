@@ -102,7 +102,7 @@ def refresh_data():
 
         return {
             "message":"Success",
-            "total returned":total}
+            "total_returned":total}
    except Exception as e:
        conn.rollback()
        raise HTTPException(status_code=500,detail= str(e))
