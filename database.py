@@ -1,27 +1,19 @@
-import sqlite3
-
-def get_connection():
-    conn= sqlite3.connect("countries.db")
-    conn.row_factory= sqlite3.Row
-    return conn
+from sqlalchemy import create_engine
+from sqlalchemy.orm import DeclarativeBase,sessionmaker
 
 
-def init_db():
-    conn= get_connection()
-    cursor= conn.cursor()
-    cursor.execute("""CREATE TABLE IF NOT EXISTS country(
-                   rank INTEGER PRIMARY KEY AUTOINCREMENT,
-                   name TEXT UNIQUE,
-                   population INTEGER,
-                   yearly_change FLOAT,
-                   net_change INTEGER,
-                   density FLOAT,
-                   land_area INTEGER,
-                   migrants INTEGER,
-                   median_age FLOAT,
-                   fertility_rate FLOAT,
-                   urban_pop FLOAT,
-                   world_share FLOAT)
-                   """)
-    conn.commit()
-    conn.close()
+DATABASE_URL = "sqlite:///countries.db"
+
+engine = create_engine(DATABASE_URL)
+
+SessionLocal = sessionmaker(bind= engine)
+
+class Base(DeclarativeBase):
+    pass
+
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()

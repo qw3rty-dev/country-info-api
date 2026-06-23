@@ -1,6 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
-from database import get_connection
+from models import Country
+from sqlalchemy.orm import Session
 def parse_int(value:str):
    value= value.replace(",","").replace("−", "-").strip()
    return int(value) if value not in ("","N.A","−") else None
@@ -53,17 +54,25 @@ def scrape_country():
 
 
 
-def fetch_data():
+def fetch_data(db: Session):
    info=scrape_country()
-   conn=get_connection()
-   cursor=conn.cursor()
+
    for row in info:
-      cursor.execute("INSERT INTO  country (name,population,yearly_change,net_change,density,land_area,migrants,fertility_rate,median_age,urban_pop,world_share) values(?,?,?,?,?,?,?,?,?,?,?)",
-                     (row['name'],row['population'],row['yearly_change'],row['net_change'],row['density'],
-                     row['land_area'],row['migrants'],row['fertility_rate'],row['median_age'],row['urban_pop'],
-                     row['world_share']))
-   conn.commit()
-   conn.close()
+      country_data = Country(name= row['name'],
+                    population= row['population'],
+                    yearly_change= row['yearly_change'],
+                    net_change= row['net_change'],
+                    density= row['density'],
+                    land_area= row['land_area'],
+                    migrants= row['migrants'],
+                    fertility_rate= row['fertility_rate'],
+                    median_age= row['median_age'],
+                    urban_pop= row['urban_pop'],
+                    world_share= row['world_share'])
+  
+      db.add(country_data)
+   db.commit()
+  
 
 
 if __name__=="__main__":

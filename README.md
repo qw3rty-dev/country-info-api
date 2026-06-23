@@ -1,92 +1,36 @@
 # Country Info API
 
-A FastAPI-based backend project that provides country statistics using scraped population data.
-
-The API supports searching, ranking, comparing countries, and viewing population-related metrics.
+A RESTful API built with **FastAPI**, **SQLAlchemy 2.0**, and **SQLite** that provides country information, statistics, comparison, ranking, and searching capabilities using data scraped from Worldometers.
 
 ---
 
 ## Features
 
-- Scrapes country population data
-- Stores data locally using SQLite
-- Search countries by name
-- Rank countries using different metrics
+- Import country data using a web scraper
+- Refresh the database with the latest scraped data
+- Retrieve all countries
+- Retrieve a country by name
 - Compare two countries
-- Cleaned and normalized numeric data
-- Typed API responses using Pydantic
-- Interactive Swagger documentation
-
----
-
-## Available Metrics
-
-- population
-- yearly_change
-- net_change
-- density
-- land_area
-- migrants
-- fertility_rate
-- median_age
-- urban_pop
-- world_share
-
----
-
-## API Endpoints
-
-### Get all countries
-
-```http
-GET /countries
-```
-
-### Get single country
-
-```http
-GET /countries/{name}
-```
-
-### Rank countries
-
-```http
-GET /countries/rank?metric=population&limit=10
-```
-
-### Compare countries
-
-```http
-GET /countries/compare?first=India&second=China
-```
-
-### Refresh dataset
-
-```http
-POST /countries/refresh
-```
-
-### API metadata
-
-```http
-GET /countries/info
-```
-
----
-
-## Swagger UI
-
-![Swagger UI](assets/swagger.png)
+- Dynamic ranking by different metrics
+- Country statistics and population insights
+- Search countries by name
+- Dynamic sorting
+- Pydantic request and response validation
+- Proper HTTP status codes and exception handling
+- Interactive API documentation with Swagger UI
 
 ---
 
 ## Tech Stack
 
+- Python 3.11
 - FastAPI
+- SQLAlchemy 2.0
 - SQLite
-- BeautifulSoup
+- BeautifulSoup4
 - Requests
-- Pydantic
+- Pydantic v2
+- Uvicorn
 
 ---
 
@@ -94,26 +38,55 @@ GET /countries/info
 
 ```text
 country-info-api/
-│
-├── main.py
-├── db.py
-├── scraper.py
-├── schemas.py
-│
-├── routes/
-│     └── countries.py
-│
 ├── assets/
-│     └── swagger.png
-│
-├── .gitignore
+│   └── swagger.png
+├── routes/
+│   └── countries.py
+├── database.py
+├── models.py
+├── schemas.py
+├── scraper.py
+├── main.py
 ├── requirements.txt
+├── .gitignore
 └── README.md
 ```
 
 ---
 
-## Run Locally
+## Installation
+
+Clone the repository:
+
+```bash
+git clone https://github.com/qw3rty-dev/country-info-api.git
+```
+
+Navigate to the project directory:
+
+```bash
+cd country-info-api
+```
+
+Create a virtual environment:
+
+```bash
+python -m venv venv
+```
+
+Activate the virtual environment.
+
+**Windows**
+
+```bash
+venv\Scripts\activate
+```
+
+**Linux/macOS**
+
+```bash
+source venv/bin/activate
+```
 
 Install dependencies:
 
@@ -121,23 +94,105 @@ Install dependencies:
 pip install -r requirements.txt
 ```
 
-Start the server:
+Run the development server:
 
 ```bash
 uvicorn main:app --reload
 ```
 
-Open Swagger docs:
+---
+
+## API Documentation
+
+Once the server is running, visit:
 
 ```text
 http://127.0.0.1:8000/docs
 ```
 
+to explore the interactive Swagger UI.
+
 ---
 
-## Notes
+##  Preview
 
-- Data is scraped from Worldometer
-- Some fields may contain missing values
-- Country data changes very rarely
-- Database is created automatically on first run
+![Swagger UI](assets/swagger.png)
+
+---
+
+##  API Endpoints
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/countries` | Retrieve all countries |
+| GET | `/countries/{country_name}` | Retrieve a country by name |
+| GET | `/countries/compare` | Compare two countries |
+| GET | `/countries/rank` | Rank countries by a selected metric |
+| GET | `/countries/stats` | Retrieve global country statistics |
+| POST | `/countries/refresh` | Refresh the database with the latest scraped data |
+
+---
+
+## Example Requests
+
+```http
+GET /countries?search=ind
+
+GET /countries?sort=population
+
+GET /countries?sort=name&descending_order=true
+
+GET /countries/compare?first_name=India&second_name=China
+
+GET /countries/rank?metric=population
+
+GET /countries/rank?metric=density&descending_order=true
+
+GET /countries/stats
+
+POST /countries/refresh
+```
+
+---
+
+## API Capabilities
+
+- SQLAlchemy 2.0 ORM
+- Dynamic filtering and searching
+- Dynamic sorting and ranking
+- Aggregate queries and statistics
+- Country comparison
+- Web scraping with BeautifulSoup
+- Session management
+- Enum-based request validation
+- Pydantic request & response models
+- SQLite database integration
+
+---
+
+## Learning Highlights
+
+This project demonstrates:
+
+- SQLAlchemy 2.0 ORM
+- Web scraping and data parsing
+- REST API design
+- Session management
+- Dynamic query construction
+- Aggregate functions
+- Response validation using Pydantic
+- Exception handling and HTTP status codes
+
+---
+
+## Future Improvements
+
+- PostgreSQL support
+- JWT Authentication
+- Pagination
+- Redis caching
+- Scheduled automatic database refresh
+- Docker support
+- Automated testing
+
+---
