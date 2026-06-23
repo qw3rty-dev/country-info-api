@@ -95,8 +95,7 @@ def refresh_data(db: Session = Depends(get_db)):
         total = db.scalar(select(func.count(Country.name)))
         return {
             "message":"Success",
-            "total_returned":total}
-   
+            "total returned":total}
    except Exception as e:
        db.rollback()
        raise HTTPException(status_code=500,detail= str(e))

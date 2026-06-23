@@ -190,6 +190,7 @@ This project demonstrates:
 - PostgreSQL support
 - JWT Authentication
 - Pagination
+
 - Redis caching
 - Scheduled automatic database refresh
 - Docker support
